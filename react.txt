@@ -1,0 +1,689 @@
+verifique as versoes do Node e do npm:
+	node -v
+	npm -v
+
+crie um app com o comando a seguir no terminal vsCode:
+	npx create-react-app my-app
+
+o que foi gerado?
+	node_modules: modulos do node para o react funcionar
+	public:
+	->index.html //html root onde o js gerará os elementos
+	src: nessa pasta tem o css e o js
+	->index.js // onde adicionamos os elementos
+	->app.js // onde tá a pagina inicial
+	
+em seguida: 
+	cd my-app	
+	npm start
+
+	ctrl + c, retorna pro terminal e digitando 's'
+
+Aula 03
+
+	*JSX é a maneira de escrever HTML com o React
+	*Podemos interpolar variaveis, inserindo ela entre {}
+	*É possivel executar funcoes em JSX;
+	*Inserir valores em atributos de tags também é válido em JSX;
+
+obs:o return nao aceita q todas as tags estejam no mesmo nivel, ou seja, 
+deve haver uma div que contenha todas as outras.
+
+Aula 04
+	Componentes
+	*permite dividir a aplicação em partes;
+	*Os componentes rendeziram jSX, assim como App.js(que é um componente);
+	*Criar um arquivo de componente;
+	*Importar um componente;
+	*Nomalmente ficm em uma pasta chamada components;
+
+	Crie uma pasta dentro de src chamada components.
+	Adicione o nome de seu componente com camelCase e inicial maiuscula, 
+extensão '.js' .ex: 
+	componente HelloWorld
+	```
+	function HelloWorld() {
+	
+	return (
+		<div></div>
+	)
+	}
+	export default HelloWorld //Exportr com o nome do componente
+	´´´´
+	
+	App.js
+	```
+	import HelloWorld form "./components/HelloWorld"
+	...
+	<div className='App'>
+		<helloWorld/>
+	</div>
+	´´´
+
+
+Aula 05
+	Props
+	*As props sao valores passados para os componentes;
+	*Podemos deixa-los dinamicos mudando a execucao por causa do valor
+da props
+	*E precisa ser resgatado dentro de uma propriedade/argumento
+chamada props na funcao de definicao do componentes;
+	*Props sao somente leitura.
+ 
+	Ao usar um componente já declarado e importado é possivel, no uso da tag do
+componente, passar valores para atributos de objetos, argumentos das funcoes desses 
+componentes.
+	...
+	<Pessoa nome="Nathan" idade="18" />
+	...
+	
+	Podemos usar essas propriedades de duas formas, no componente Pessoa:
+	1- 
+	´´´function Pessoa (){
+	return (
+		<>
+			<h1>Nome: {props.nome}</>
+		</>
+	)
+	}´´´
+	
+	2-
+	´´´function Pessoa ({nome, idade, peso}){
+	return (
+		<>
+			<h1>Nome: {nome}</>
+			<h1>Idade: {idade}</>
+		</>
+	)
+	}´´´
+
+Arquivos criados: components/Pessoa
+
+
+Aula 06
+	O CSS pode ser adicionado de forma global na aplicação, por meio do arquivo 
+index.css por exemplo;
+	*o index.css é chamado pelo index.js
+
+	Porém, é possivel estilizar a nivel de componentes para isso utilizamos o
+CSS modules. Basta criar um arquivo: NomeComponente.module.css, e chamar este CSS no
+componente.
+	*não é possivel criar classes com "-", nesses arquivos.
+	O componente que for utilizar um determinado arquivo css deve fazê-lo da 
+seguinte forma:
+	import styles from './NomeDoEstilo.module.css'
+	...
+	<div className={styles.classeA}
+	*styles torna-se um objeto onde seus atributos são as classes declaradas no 
+arquivo CSS importado.
+arquivos criados: components/Frase.module.css
+
+------------------------------------------------------------------------------------
+
+Aula 07
+	React Fragmentos
+	Permite a criação de um componente sem elemento pai, descomplicando os nós
+do DOM.Com sintaxe: <></>, sem nome para a tag. Criamos no próprio JSX. Ao invés de retornar um componente dentro
+de uma tag <div></div> fazemos: <></>, apenas.
+
+Arquivos criados: Components/Item e List.
+
+------------------------------------------------------------------------------------
+
+Aula 08
+	Avançando em props
+	Definir tipos para as props, realizando uma especie de validacao;
+	Definimos em um objeto chamado propTypes no proprio componente;
+	e ainda ha a possibilidade de definir um valor padrao, defaultProps.
+
+import PropTypes from 'prop-types'
+...
+Item.propTypes = {
+	marca: PropTypes.string.isRequired,
+	ano_lancamento: PropTypes.number,
+}
+
+Item.defaultProps = {
+	marca: 'Faltou a marca',
+	ano_lancamento: 0,
+}
+
+obs: import --PropTypes camelCase inicial maiuscula
+     Item.propTypes -- somente camelCase
+
+COMPONENTES ADICIONADOS:
+
+LISTA
+```
+import Item from './Item'
+
+function List() {
+    return (
+        <>
+            <h1>Minha Lista</h1>
+            <ul>
+                <Item marca="Ferrari" ano_lancamento={1999}/>
+                <Item marca="Fiat" />
+                <Item />
+            </ul>
+        </>
+    )
+}
+
+export default List
+´´´
+
+
+ITEM
+```
+import PropTypes from 'prop-types'
+
+function Item({marca, ano_lancamento }) {
+    return (
+        <>
+        <li>{marca} - {ano_lancamento}</li>
+        </>
+    )
+}
+
+Item.propTypes = {
+    marca: PropTypes.string.isRequired,
+    ano_lancamento: PropTypes.number,
+}
+
+Item.defaultProps = {
+    marca: 'Faltou a marca',
+    ano_lancamento: 0,
+}
+
+export default Item
+´´´
+
+------------------------------------------------------------------------------------
+
+Aula 09
+	Eventos
+	Os eventos de React são os mesmos eventos do DOM;
+	Ou seja, temos eventos para responder a um click. O evento é atrelado
+a uma tag que irá executá-lo;
+	Geralmente um método é atribuido ao evento;
+	Esse método deve ser criado no componente. 
+
+	Componente Evento:
+	function cadastrarPessoa(){}
+	...
+	<button onCLick={cadastrarPessoa}
+
+-----------------------------------------------------------------------------
+
+Aula 10
+	UseState
+	O useState é um hook do React
+	Com ele conseguimos manusear o estado de um componente de forma simples;
+	Este hook funciona muito bem com eventos;
+	Podemos atrelar um evneto a mudança de state.
+
+	usando o 'onCharge' podemos salvar as mudanças nos campos do form em uma
+constante antes de enviarmos para a funcao que o form chama.
+	
+	import {useState} from 'react'
+	...
+	const [atributo, setAtributo] = useState('null')//setAtributo é somente escrita
+ e o outro é somemente leitura
+	...
+	onChange={(e) => setAtributo(e.target.value)}//para qualquer input
+
+COMPONENTES ADICIONADOS:
+FORM
+```
+import { useState} from 'react'
+
+function Form() {
+
+    function cadastrarUsuario(e) {
+        e.preventDefault()//um form envia pro backEnd e recarrega 
+                        //a pagina. esse comando para esse fluxo para 
+                        //exexutar oq esta logo em seguida 
+        console.log(`${nome} cadastrou com a senha: ${passWord}`)
+    }
+
+    const [nome, setNome] = useState()
+    const [passWord, setPassWord] = useState()
+
+    return (
+        <>
+            <h1>Meu cadastro:</h1>
+            <form onClick={cadastrarUsuario}>
+                <div>
+                    <label htmlFor="name">Nome:</label>
+                    <input 
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="digite seu nome"
+                        onChange={(e) => setNome(e.target.value)}
+                    />
+                </div>
+
+                <div>
+                    <label htmlFor="password">PassWord:</label>
+                    <input 
+                        type="passWord"
+                        id="passWord"
+                        name="passWord"
+                        placeholder="digite sua senha"
+                        onChange={(e) => setPassWord(e.target.value)}
+                    />
+                </div>
+
+                <div>
+                    <input 
+                        type="submit"
+                        value="Cadastrar"
+                    />
+                </div>
+            </form>
+        </>
+    )
+}
+
+export default Form
+´´´
+
+------------------------------------------------------------------------------------------
+Aula 11
+	Passar eventos por Props
+
+	Os metodos tambem podem ser passados por props, 
+    ou seja, um componenete filho pode ativar o metodo do seu ancestral.
+	Vamos acessar o metodo por meio de um evento;
+	a sintaxe é a mesma de uma props de dados: props.meuEvento;
+
+	--no componente pai
+	function nomeEvento(){}
+	...
+	<componente event={nomeEvento} ></>
+
+	--no componente filho
+	<button onClik={props.event}> {props.text}</>
+	//dessa forma, a funcao nomeEvento do componente Pai sera ativada
+
+obs: onClick no componente, para indicar qual funcao sera ativada com o clique. event quando a funcao é de outro
+componente
+
+OBS: Dessa forma componentes de mesmo tipo podem chamar funcões diferentes somente mudando o "event={}"
+
+	os metodos sao centalizados no Pai pois os componente sao reutilizados
+muitas vezes e com metodos muito especificos nos componentes a utilidade dos componentes fica limitado.
+
+COMPONENTES ADICIONADOS: 
+EVENTO
+```
+import Button from "./Eventos/Button"
+
+function Evento() {
+
+    function primeiroEvento() {
+        console.log(`primeiro evento ativado`)
+    } 
+    function segundoEvento() {
+        console.log(`segundo evento ativado`)
+    } 
+
+    return (
+        <>
+            <p>Clique para disparar um evento</p>
+            <Button event={primeiroEvento} text="primeriro evento"/>
+            <Button event={segundoEvento} text="segundo evento"/>
+            <button onClick={segundoEvento}>Ativar</button>
+        </>
+    )
+}
+
+export default Evento
+´´´
+BUTTON
+```
+function Button(props) {
+    return <button onClick={props.event}>{props.text}</button>
+}
+
+export default Button
+´´´
+
+
+------------------------------------------------------------------------------------------
+Aula 12
+	Renderização por condição
+	Podemos atrelar a exibição de algum elemento a um if;
+	Esta ação é chamada de renderização condicional;
+	Envolvemos as tags em chaves {};
+	Como as chaves executam JavaScript, criamos nossa condição;
+	É possível usar o state para criar as condições;
+	
+	
+	function limparEmail()
+	{
+		setUserEmail('')//useState
+	} 
+	...
+	{ userEmail && (
+		<div>
+			<p>O email do usuario é {userEmail}</p>
+			<button onClick={limparEmail}>Limpar email</button>
+		</div>
+	)}
+OBS: quando o valor de userEmail for diferente de null. A função limparEmail torna o valor null.
+
+COMPONENTE ADICIONADO: 
+CONDICIONAL
+```
+import { useState } from "react"
+
+function Condicional() {
+
+    const [email, setEmail] = useState()
+    const [userEmail, setUserEmail]= useState()
+
+    function enviarEmail(e) {
+        e.preventDefault()
+        setUserEmail(email)
+    }
+
+    function limparEmail() {
+        setUserEmail('')
+    }
+
+    return (
+        <div>
+            <h2>Cadastre seu email:</h2>
+            <form>
+                <input type="email" placeholder="digite seu email" onChange={(e) => setEmail(e.target.value)}/>
+            </form>
+            <button type="submit" onClick={enviarEmail}>Enviar email</button>
+            {userEmail && (
+                <div>
+                    <p>O email do usuario eh: {userEmail}</p>
+                    <button onClick={limparEmail}>Limpar Email</button>
+                </div>
+            )}
+        </div>
+    )
+}
+
+export default Condicional
+´´´
+
+------------------------------------------------------------------------------------------
+
+Aula 13
+	Renderizando listas
+	Para renderizar listas vamos primeirasamente precisar de um array;
+	Depois utilizamos a função map, para percorrer cada um dos itens;
+	Podendo assim renderizar algo na tela;
+	É possivel unir operadores condicionais com a renderização de listas, 
+para o caso de uma lista vazia.
+
+OBS:
+	{itens.map((item, index) => (
+        	<p key={index}>{item}</p>
+        ))}
+
+{itens.map( () => () )}
+
+Em =>() deve ser m '()' pois esta returnando em JSX
+o index resolve o erro do JavaScript. Cada elemento de uma lista deve ter o atributo id: item =[{id:1 , nome:''}]
+
+Componente adicionado: OutraLista
+```
+function OutraLista({ itens }) {
+    return (
+        <>
+            <h3>Lista de FrameWorks:</h3>
+            {itens.length > 0 ? (
+                itens.map((item, index) => <p key={index}>{item}</p>)
+            ) : (
+                <p>Não há itens na lista!</p>
+            )}
+        </>
+    )
+}
+
+export default OutraLista
+´´´
+
+
+OBS: A propriedade .length não é definida. Está dando erro.
+
+###########################################################################
+
+Aula 14
+	State Lift
+	É uma técnica para compartilhar o state;
+	É normal vários componentes dependerem do mesmo estado;
+	Então precisamos elevar o nível do mesmo a um componente pai;
+	Então centralizamos o state no pai, e definimos quem usa e quem define (setState);
+	Podemos dessa forma compartilhar atributos através do componente pai.
+
+	O componente pai usa o useState para controlar as mudanças no estado e passa os metodos
+set e get para seus componentes filhos.
+
+COMPONENTES ADICIONADOS:
+APP
+```
+import './App.css';
+import Saudacao from './components/Saudacao';
+import SeuNome from './components/SeuNome';
+import {useState} from 'react'
+
+function App() {
+  const [nome, setNome] =  useState()
+
+  return (
+    <div className='App'>
+      <h1>State Lift</h1>
+      <SeuNome setNome={setNome}/>
+      <Saudacao nome ={nome}/>
+    </div>
+  );
+}
+
+export default App;
+´´´
+
+SAUDACAO
+```
+function Saudacao({nome}) {
+    function gerarSaudacao(algumNome) {
+        return `Olá, ${algumNome}, tudo bem?`
+    }
+
+    return (
+        <>
+        {nome &&
+            <p>{gerarSaudacao(nome)}</p>
+        }
+        </>
+    )
+}
+
+export default Saudacao
+´´´
+
+SEUNOME
+```
+function SeuNome({setNome}) {
+    return (
+        <div>
+            <p>digite seu nome:</p>
+            <input type="text" 
+            placeholder="Qual é o seu nome?"
+            onChange={(e) => setNome(e.target.value)}
+            />
+        </div>
+    )
+}
+
+export default SeuNome
+´´´
+
+##########################################################################
+Aula 15
+
+	React Router
+	O React Router é um pacote para mudanças de URLs da aplicação;
+	Podemos assim acessar outras views, sem o page reload;
+	Trocando apenas uma parte do layout da aplicação, ou seja, o que muda
+de view para view;
+	Precisamos instalar este pacote no projeto;
+	E também realizar algumas mudanças em como o App é estruturado.
+
+
+	Primeiramente, instale o react-router-dom: npm install react-router-dom;
+	Crie os componentes que serão linkados;
+	Adicione: 
+	<Router>
+	   <ul>
+	      <li><Link to='/Home'>HOME</Link></li>
+	      <li><Link to='/Empresa'>EMPRESA</Link></li>
+	   </ul>
+	   
+	   <Routes>
+              <Route exact path="/" element={<Home />} />
+              <Route path="/empresa" element={<Empresa />} />
+	   </Routes>
+	</Router>
+
+MODIFICAÇÕES NO APP:
+```
+import './App.css';
+import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom'
+import Home from './components/pages/Home'
+import Empresa from './components/pages/Empresa';
+import Contato from './components/pages/Contato'
+
+function App() {
+
+  return (
+    <Router>
+      <ul>
+        <li><Link to="/" >Home</Link></li>
+        <li><Link to="/empresa" >Empresa</Link></li>
+        <li><Link to="/contato" >Contato</Link></li>
+      </ul>
+
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+        <Route path="/empresa" element={<Empresa />} />
+        <Route path="/contato" element={<Contato />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
+´´´
+
+Os componentes declarados fora de <Routes> não são alterados, dessa forma 
+podemos adicionar um NavBar e um fotter.
+
+COMPONENTES CRIADOS:
+HOME
+```
+function Home() {
+    return(
+        <div>
+            <h1>Home</h1>
+            <p>Conteúdo da página</p>
+        </div>
+    )
+}
+
+export default Home
+´´´
+
+EMPRESA
+```
+function Empresa() {
+    return(
+        <div>
+            <h1>Empresa</h1>
+            <p>Conteúdo da página</p>
+        </div>
+    )
+}
+
+export default Empresa
+´´´
+
+CONTATO
+```
+function Contato() {
+    return(
+        <div>
+            <h1>Contato</h1>
+            <p>Conteúdo da página</p>
+        </div>
+    )
+}
+
+export default Contato
+´´´
+
+##########################################################################
+
+Aula 16
+	React Icons
+	O React Icons é um pacote de ícones externo;
+	Precisamos adicionar ao projeto através do npm;
+	Ele nos permite adicionar ícones ao projeto com uma sintaxe parecida a de
+componentes;
+	Além disso há uma grande quantidade de ícones disponíveis.
+	Site React Icons
+
+	npm install react-icones --save
+
+
+COMPONENTES ADICIONADOS:
+
+FOOTER
+```
+import {FaFacebook, FaInstagram, FaLinkedin} from 'react-icons/fa'
+import styles from './footer.module.css'
+
+function Footer() {
+    return (
+        <>
+            <footer>
+                <ul className={styles.social_list}>
+                    <li><FaFacebook/></li>
+                    <li><FaInstagram/></li>
+                    <li><FaLinkedin/></li>
+                </ul>
+            </footer>
+        </>
+    )
+}
+
+export default Footer
+´´´
+
+FOOTER.MODULE.CSS
+```
+.social_list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+}
+
+.social_list li {
+    margin: 0 1rem;
+}
+
+.social_list svg{
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: blue;
+}
+´´´
